@@ -8,3 +8,8 @@ register_user:
     path: /register
     methods: [POST]
     controller: App\Controller\UserController::register
+
+app_api_get_popular_movies:
+    path: /api/movies/popular
+    controller: App\Controller\MovieController::popularMovies
+    methods: [GET]

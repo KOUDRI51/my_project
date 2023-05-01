@@ -14,13 +14,6 @@ class UserController extends AbstractController
 {
     
     
-    // public function index(): JsonResponse
-    // {
-    //     return $this->json([
-    //         'message' => 'Welcome to your new controller!',
-    //         'path' => 'src/Controller/UserController.php',
-    //     ]);
-    // }
     public function register(Request $request, EntityManagerInterface $entityManager)
     {
         $data = json_decode($request->getContent(), true);
@@ -28,12 +21,12 @@ class UserController extends AbstractController
         $username = $data['username'];
         $password = $data['password'];
     
-        // validate input
+        
         if (empty($username) || empty($password)) {
             return new JsonResponse(['error' => 'Username and password are required'], 400);
         }
     
-        // check if user already exists
+      
         $existingUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
         if ($existingUser) {
             return new JsonResponse(['error' => 'Username already exists'], 400);
@@ -42,9 +35,9 @@ class UserController extends AbstractController
         // create new user
         $user = new User();
         $user->setUsername($username);
-        $user->setPassword(password_hash($password, PASSWORD_DEFAULT)); // hash password
+        $user->setPassword(password_hash($password, PASSWORD_DEFAULT)); 
     
-        // save user to database
+        
         $entityManager->persist($user);
         $entityManager->flush();
     

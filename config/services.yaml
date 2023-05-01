@@ -1,27 +1,28 @@
-
-parameters:
-
 services:
-  
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    
-    # Alias for the EntityManagerInterface
+        autowire: true
+        autoconfigure: true
+
     Doctrine\ORM\EntityManagerInterface:
         alias: doctrine.orm.entity_manager
-    
-    
-    App\Controller\:
-        resource: '../src/Controller/'
+
+    App\Service\MovieDbApiService:
+        arguments:
+            $apiKey: '%env(MOVIE_DB_API_KEY)%'
+
+    App\Controller\ApiController:
+        arguments:
+            $movieDbApiService: '@App\Service\MovieDbApiService'
         tags: ['controller.service_arguments']
-    
-    # makes classes in src/ available to be used as services
+
+    App\Controller\MovieController:
+        arguments:
+            $movieDbApiService: '@App\Service\MovieDbApiService'
+        tags: ['controller.service_arguments']
+
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
-    
